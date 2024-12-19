@@ -1,6 +1,6 @@
-package com.yupi.generator;
+package ${basePackage}.generator;
 
-import com.yupi.model.MainTemplateConfig;
+import cn.hutool.core.io.FileUtil;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -14,17 +14,6 @@ import java.io.Writer;
  * 动态文件生成
  */
 public class DynamicGenerator {
-
-    public static void main(String[] args) throws IOException, TemplateException {
-        String projectPath = System.getProperty("user.dir");
-        String inputPath = projectPath + File.separator + "src/main/resources/templates/MainTemplate.java.ftl";
-        String outputPath = projectPath + File.separator + "MainTemplate.java";
-        MainTemplateConfig mainTemplateConfig = new MainTemplateConfig();
-        mainTemplateConfig.setAuthor("yupi");
-        mainTemplateConfig.setLoop(false);
-        mainTemplateConfig.setOutputText("求和结果：");
-        doGenerate(inputPath, outputPath, mainTemplateConfig);
-    }
 
     /**
      * 生成文件
@@ -50,15 +39,9 @@ public class DynamicGenerator {
         String templateName = new File(inputPath).getName();
         Template template = configuration.getTemplate(templateName);
 
-        // 创建数据模型
-        MainTemplateConfig mainTemplateConfig = new MainTemplateConfig();
-        mainTemplateConfig.setAuthor("yupi");
-        mainTemplateConfig.setLoop(false);
-        mainTemplateConfig.setOutputText("求和结果：");
-
-        File directory = new File("D:\\mycode\\yuzi-generator\\acm-template-pro\\src\\com\\yupi\\acm");
-        if (!directory.exists()) {
-            directory.mkdirs(); // 创建所有必要的目录
+        // 文件不存在则创建文件和父目录
+        if (!FileUtil.exist(outputPath)) {
+            FileUtil.touch(outputPath);
         }
 
         // 生成
